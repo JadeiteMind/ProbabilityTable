@@ -12,6 +12,15 @@ class ProbabilityTable:
         self.table[item] = weight
         self.total_weight += weight
 
+    def update_weight(self, item, new_weight):
+        if new_weight < 0:
+            raise ValueError("Weight cannot be negative.")
+        if item not in self.table:
+            raise ValueError("Item not found in the probability table.")
+        self.total_weight -= self.table[item]
+        self.total_weight += new_weight
+        self.table[item] = new_weight
+
     def calculate_probability(self, item):
         if item not in self.table:
             raise ValueError("Item not found in the probability table.")
@@ -28,16 +37,3 @@ class ProbabilityTable:
             cumulative_weight += weight
             if random_num <= cumulative_weight:
                 return item
-
-
-if __name__ == "__main__":
-    # 示例用法
-    pt = ProbabilityTable()
-    pt.add_item("apple", 0.4)
-    pt.add_item("banana", 0.5)
-    pt.add_item("orange", 0.2)
-
-    print("Probability of item 'apple':", '%.5f' % (pt.calculate_probability("apple")))
-
-    sampled_item = pt.sample_item()
-    print("Sampled item:", sampled_item)
